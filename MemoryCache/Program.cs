@@ -12,7 +12,7 @@ namespace MemoryCache
             var detailsDbMock = new DeviceDetailsDbMock();
             var _deviceCache =
                 new MemoryCache<DeviceDetails>(
-                    async () => await detailsDbMock.GetTasks());
+                    async () => await detailsDbMock.GetTasks(), 500);
             var name = await _deviceCache.GetAsync();
 
             Console.WriteLine("name: " + name.Name);

@@ -12,13 +12,21 @@ namespace MemoryCache.Models
         public MemoryCache(Func<Task<T>> fetchData)
             : base(fetchData)
         {
+
+        }
+
+        public MemoryCache(Func<Task<T>> fetchData, int validThroughMiliseconds)
+            : base(fetchData, validThroughMiliseconds)
+        {
+
         }
 
         public override async Task<T> GetAsync()
         {
             T newDepositeValue;
 
-            if (Deposite == default)
+            if (Deposite == default
+               || (_validTo != default && _validTo < DateTime.Now))
             {
                 newDepositeValue = await _fetchData();
 
@@ -26,6 +34,10 @@ namespace MemoryCache.Models
                 {
                     Console.WriteLine("is null");
                     Deposite = newDepositeValue;
+                    if (_validThroughMiliseconds != default)
+                    {
+                        _validTo = DateTime.Now.AddMinutes(_validThroughMiliseconds);
+                    }
                 }
             }
             else
