@@ -25,8 +25,8 @@ namespace MemoryCache.Models
         {
             T newDepositeValue;
 
-            if (Deposite == default
-               || (_validTo != default && _validTo < DateTime.Now))
+            if (Deposite.Equals(default(T))
+               || (!_validTo.Equals(default) && _validTo < DateTime.Now))
             {
                 newDepositeValue = await _fetchData();
 
@@ -34,9 +34,9 @@ namespace MemoryCache.Models
                 {
                     Console.WriteLine("is null");
                     Deposite = newDepositeValue;
-                    if (_validThroughMiliseconds != default)
+                    if (!_validThroughMiliseconds.Equals(default))
                     {
-                        _validTo = DateTime.Now.AddMinutes(_validThroughMiliseconds);
+                        _validTo = DateTime.Now.AddMilliseconds(_validThroughMiliseconds);
                     }
                 }
             }
